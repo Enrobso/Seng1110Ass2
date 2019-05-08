@@ -118,7 +118,9 @@ public class Interface
     /*public boolean equals(int depotPos){
         return depot[depotPos].getDepot();
     }*/
-    
+    /**
+     * Sets all the depots to a default value at the beginning of the program.
+     */
     public void initiateDepots(){
         for (int i = 0; i < depot.length; i++){
             depot[i] = new Depot();
@@ -178,6 +180,8 @@ public class Interface
             }
             depot[counter].setDepot(UserInput);
             counter++;
+            depotArraySort();
+            arraySortEmpty();
         }
         else{
             System.out.println("Sorry, you already have 4 depots.");
@@ -199,15 +203,16 @@ public class Interface
             //We then sort the array so the empty space is equal to counter.
             System.out.println("Enter the name of the depot you wish to delete:");
             UserInput = keyboard.nextLine();
-            if ((depot1 != null) && depot1.getName().equals(UserInput)){
-                depot1 = null;
+            for (int i = 0; i < depot.length; i++){
+                if (depot[i].getDepot().equals(UserInput)){
+                    depot[i] = null;
+                    depot[i] = new Depot();
+                    depot[i].resetDepot();
+                }
             }
-            else if ((depot2 != null) && depot2.getName().equals(UserInput)){
-                depot2 = null;
-            }
-            else{
-                System.out.println("Sorry that does not match any listed depots.");
-            }
+            counter--;
+            depotArraySort();
+            arraySortEmpty();
         }
         returnToMenu();
     }
@@ -387,5 +392,34 @@ public class Interface
     public void returnToMenu(){//We need to double check where we want to put this method.
         System.out.println("Enter any character to return to menu:");
         UserInput = keyboard.nextLine();
+    }
+    /**
+     * Sorts the arrays into alphabetical order, with empty depots at the end.
+     */
+    public void depotArraySort(){
+        for (int i = 0; i< depot.length; i++){
+            for (int j = i + 1; j < depot.length; j++){
+                if (depot[i].getDepot().compareTo(depot[j].getDepot()) > 0){
+                    Depot aux = depot[i];
+                    depot[i] = depot[j];
+                    depot[j] = aux;
+                }
+            }
+        }
+    }
+    /**
+     * This sorts the array so that all empty elements are put to the end of the array.
+     * The first empty place is the same as counter.
+     */
+    public void arraySortEmpty(){
+    for (int i = 0; i < depot.length; i++){
+            for (int j = i + 1; j < depot.length; j++){
+                if (depot[i].getDepot().equals("Empty") && !(depot[j].getDepot().equals("Empty"))){
+                    Depot aux = depot[i];
+                    depot[i] = depot[j];
+                    depot[j] = aux;
+                }
+            }
+        }
     }
 }
