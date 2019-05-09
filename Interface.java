@@ -203,13 +203,21 @@ public class Interface
             //We then sort the array so the empty space is equal to counter.
             System.out.println("Enter the name of the depot you wish to delete:");
             UserInput = keyboard.nextLine();
-            for (int i = 0; i < depot.length; i++){
-                if (depot[i].getDepot().equals(UserInput)){
-                    depot[i] = null;
-                    depot[i] = new Depot();
-                    depot[i].resetDepot();
+            int repeatLoop = 0;
+            do{
+                for (int i = 0; i < depot.length; i++){
+                    if (depot[i].getDepot().equals(UserInput)){
+                        depot[i] = null;
+                        depot[i] = new Depot();
+                        depot[i].resetDepot();
+                        repeatLoop = 1;
+                    }
+                    if((repeatLoop == 0) && (i == 3)){
+                        System.out.println("Sorry that did not match any of the depots. Try again.");
+                        UserInput = keyboard.nextLine();
+                    }
                 }
-            }
+            }while(repeatLoop == 0);
             counter--;
             depotArraySort();
             arraySortEmpty();
