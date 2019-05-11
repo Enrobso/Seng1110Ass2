@@ -14,11 +14,20 @@ public class Depot
     //These are for the new program.
     //This will be similar to the methods in Interface for the depot array.
     private Product[] product = new Product[5];
+    private static Product[] productSameName = new Product[1];
     private int counter = 0;
     
     //The following methods will be for the new program.
     public Depot(){
         name = "Empty";
+    }
+    public static void initiateSameNameArray(){
+        for (int i = 0; i < productSameName.length; i++){
+            productSameName[i] = new Product();
+        }
+    }
+    public int getCounter(){
+        return counter;
     }
     /**
      * Checks if the products are all null. Returns true if so.
@@ -42,21 +51,38 @@ public class Depot
     }
     //This method will be implemented in case 3. 
     //The user will be notified if there is a product already with the same inputted name.
-    public int searchProductArray(String inputOfUser){
+    public Product[] searchProductArray(String inputOfUser){
+        int returnValue = 0;
+        
+        for (int i = 0; i < product.length; i++){
+            if (product[i].getName().equals(inputOfUser)){
+                productSameName[0].setName(product[i].getName());
+                productSameName[0].setPrice(product[i].getPrice());
+                productSameName[0].setWeight(product[i].getWeight());
+            }
+        }
+        return productSameName;
+    }
+    public int checkProductArray(String inputOfUser){
         int returnValue = 0;
         for (int i = 0; i < product.length; i++){
             if (product[i].getName().equals(inputOfUser)){
-                returnValue  += 1;
+                returnValue = 1;
             }
         }
         return returnValue;
+    }
+    public void setSameNameArray(int i){
+        product[i] = productSameName[0];
+        counter++;
+        productArraySort();
+        emptyProductSort();
     }
     /**
      * Preposition: name, price, weight and quantity of product.
      * Postcondition: New product added to specified depot if depot is not full.
      */
     public void addProduct(String newName, double newPrice, double newWeight, int newQuantity){
-        if (counter < 5){
             product[counter] = new Product();
             product[counter].setName(newName);
             product[counter].setPrice(newPrice);
@@ -66,11 +92,8 @@ public class Depot
             counter++;
             productArraySort();
             emptyProductSort();
-        }
-        else{
-            System.out.println("Sorry this depot is full.");
-        }
     }
+    
     /**
      * This sorts the product array into alphabetical order.
      */
