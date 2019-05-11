@@ -12,6 +12,12 @@ public class Product
     private double weight;
     private int quantity;
     
+    public Product(){
+        name = "Empty";
+        price = 0;
+        weight = 0;
+        quantity = 0;
+    }
     
 
 
