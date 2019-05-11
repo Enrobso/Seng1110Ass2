@@ -27,6 +27,7 @@ public class Interface
      */
     public void run(){
         initiateDepots();
+        
         /**Input is anything but 9. The loop will continue to run.
          * Input is 9, the program exits.
          */
@@ -124,7 +125,7 @@ public class Interface
     public void initiateDepots(){
         for (int i = 0; i < depot.length; i++){
             depot[i] = new Depot();
-            depot[i].resetDepot();
+            depot[i].initiateProducts();
         }
     }
     
@@ -155,13 +156,17 @@ public class Interface
      */
     //This will probably be a method in the depot class. Will have to see later on. 
     public void inputNewProduct(){
-        System.out.println("Enter the name of the product:");
-        UserInput = keyboard.nextLine();
         System.out.println("Now enter the price (dollars), weight (kilograms) and quanity in that order.");
         price = keyboard.nextDouble();
         weight = keyboard.nextDouble();
         quantity = keyboard.nextInt();    
     }
+    
+    //This could be a method implemented to reduce copy-paste.
+    /*public void checkDepotMatch(){
+        
+    }*/
+    
     /**
      * Input is 1, the method to add a depot is invoked. It checks the counter. If the counter is at 4, the depots are full. 
      * If one is empty the depot will add a name to the first empty depot.
@@ -209,7 +214,6 @@ public class Interface
                     if (depot[i].getDepot().equals(UserInput)){
                         depot[i] = null;
                         depot[i] = new Depot();
-                        depot[i].resetDepot();
                         repeatLoop = 1;
                     }
                     if((repeatLoop == 0) && (i == 3)){
@@ -237,29 +241,28 @@ public class Interface
             System.out.println("Type the depot you want to add a product too");
             UserInput = keyboard.nextLine();
             //A product is added to a specified depot.
-            if (depot1 != null && depot1.getName().equals(UserInput)){   
-                if (depot1.checkProductAgain() == false){
-                    inputNewProduct();
-                    depot1.setProduct(UserInput, price, weight, quantity);
-                    UserInput = keyboard.nextLine();
+            int indexDepot = -1;
+            int repeatLoop = 0;
+            for (int i = 0; i < depot.length; i++){
+                if (depot[i].getDepot().equals(UserInput)){
+                    indexDepot = i;
+                    repeatLoop = 1;
                 }
-                //No products can be added if there are already 3 in the depot.
-                else{
-                    System.out.println("Sorry, this depot is full.");
-                }
-            }     
-            else if (depot2 != null && depot2.getName().equals(UserInput)){
-                if (depot2.checkProductAgain() == false){
-                    inputNewProduct();
-                    depot2.setProduct(UserInput, price, weight, quantity);
-                    UserInput = keyboard.nextLine();
-                }
-                else{
-                    System.out.println("Sorry, this depot is full.");
+                if ((repeatLoop == 0) && (i == 3)){
+                    System.out.println("Sorry that does not match any listed depots.");
+                    returnToMenu();
                 }
             }
-            else{
-                System.out.println("Sorry, that does not match any listed depots.");
+            if(repeatLoop == 1){
+                //depot[i]   implement a method in Depot that adds the product to depot[i].
+                System.out.println("Now enter the name of the product: ");
+                UserInput = keyboard.nextLine();
+                //Enter depot and product array check in here. If there is a product with the same name, indicate this.
+            
+                //Now set the product.
+                inputNewProduct();
+                depot[indexDepot].addProduct(UserInput, price, weight, quantity);
+                keyboard.nextLine();
             }
         }
     }
@@ -323,17 +326,18 @@ public class Interface
             printDepots();
         }
         else{
-            System.out.println("Which depot do you want to query for products?");
+            System.out.println("which depot do you want to query for products:");
             UserInput = keyboard.nextLine();
-            if ((depot1 != null) && depot1.getName().equalsIgnoreCase(UserInput)){
-                System.out.println(depot1.getProduct());
-            }  
-            else if ((depot2 != null) && depot2.getName().equalsIgnoreCase(UserInput)){
-                System.out.println(depot2.getProduct());
-            }
-            else{
-                System.out.println("Sorry that does not match any listed depots.");
-            }       
+            int repeatLoop = 0;
+            for (int i = 0; i < depot.length; i++){
+                if (depot[i].getDepot().equals(UserInput)){
+                    depot[i].getProduct();
+                    repeatLoop = 1;
+                }
+                if((repeatLoop == 0) && (i == 3)){
+                    System.out.println("Sorry that did not match any of the depots.");
+                }
+            }    
         }
         returnToMenu();
     }
