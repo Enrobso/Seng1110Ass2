@@ -7,12 +7,32 @@ This class contains all the details of the depot.
 */
 public class Depot
 {
+    //These are the instance variables for the old program.
     private String name;
-    private Product[] product = new Product[5];
     private Product product1, product2, product3, product4, product5;
     
-    public void resetDepot(){
+    //These are for the new program.
+    //This will be similar to the methods in Interface for the depot array.
+    private Product[] product = new Product[5];
+    private int counter = 0;
+    
+    //The following methods will be for the new program.
+    public Depot(){
         name = "Empty";
+    }
+    /**
+     * Checks if the products are all null. Returns true if so.
+     */
+    public boolean checkProduct(){
+        if (counter == 0)
+        return true;
+        else
+        return false;
+    }
+    public void initiateProducts(){
+        for (int i = 0; i < product.length; i++){
+            product[i] = new Product();
+        }
     }
     public void setDepot(String newName){
         name = newName;
@@ -20,7 +40,94 @@ public class Depot
     public String getDepot(){
         return name;
     }
+    //This method will be implemented in case 3. 
+    //The user will be notified if there is a product already with the same inputted name.
+    public int searchProductArray(String inputOfUser){
+        int returnValue = 0;
+        for (int i = 0; i < product.length; i++){
+            if (product[i].getName().equals(inputOfUser)){
+                returnValue  += 1;
+            }
+        }
+        return returnValue;
+    }
+    /**
+     * Preposition: name, price, weight and quantity of product.
+     * Postcondition: New product added to specified depot if depot is not full.
+     */
+    public void addProduct(String newName, double newPrice, double newWeight, int newQuantity){
+        if (counter < 5){
+            product[counter] = new Product();
+            product[counter].setName(newName);
+            product[counter].setPrice(newPrice);
+            product[counter].setWeight(newWeight);
+            product[counter].setQuantity(newQuantity);
+            
+            counter++;
+            productArraySort();
+            emptyProductSort();
+        }
+        else{
+            System.out.println("Sorry this depot is full.");
+        }
+    }
+    /**
+     * This sorts the product array into alphabetical order.
+     */
+    public void productArraySort(){
+        for (int i = 0; i< product.length; i++){
+            for (int j = i + 1; j < product.length; j++){
+                if (product[i].getName().compareTo(product[j].getName()) > 0){
+                    Product aux = product[i];
+                    product[i] = product[j];
+                    product[j] = aux;
+                }
+            }
+        }
+    }
+    /**
+     * This sorts the array so that all empty elements are put to the end of the array.
+     * The first empty place is the same as counter.
+     */
+    public void emptyProductSort(){
+    for (int i = 0; i < product.length; i++){
+            for (int j = i + 1; j < product.length; j++){
+                if (product[i].getName().equals("Empty") && !(product[j].getName().equals("Empty"))){
+                    Product aux = product[i];
+                    product[i] = product[j];
+                    product[j] = aux;
+                }
+            }
+        }
+    }
+    /**
+     * Returns a one line message "No products" if all the products are null.
+     * If not all products are empty, the values of the existing depots is returned.
+     */
+    public void getProduct(){
+        if (checkProduct() == true)
+        System.out.println("No products.");
+        else
+        getProductIndividual();
+    }
+    /**
+     * Returns products' values for getProduct.
+     */
+    public void getProductIndividual(){
+        for (int i = 0; i < product.length; i++){
+            if (!product[i].getName().equals("Empty"))
+            System.out.println("Name: "+product[i].getName()+" Price: $"+product[i].getPrice()+" Weight: "+product[i].getWeight()+"kg Quantity: "+product[i].getQuantity()+".");
+            else
+            System.out.println(product[i].getName());
+        }
+    }
     
+    
+    
+    
+    
+    
+    //These methods are for the old program, but may be modified as the program progresses.
     /**
      * Returns the depot names. All the methods dealing with instance variables use incapsulation.
      */
@@ -137,15 +244,7 @@ public class Depot
             return product3.getQuantity();
     }
     
-    /**
-     * Checks if the products are all null. Returns true if so.
-     */
-    public boolean checkProduct(){
-        if (product1 == null && product2 == null && product3 == null)
-        return true;
-        else
-        return false;
-    }
+    
     /**
      * Similar to checkProduct, except it returns true if all the products are full.
      */
@@ -156,25 +255,7 @@ public class Depot
         return false;
     }
     
-    /**
-     * Returns a one line message "No products" if all the products are null.
-     * If not all products are empty, the values of the existing depots is returned.
-     */
-    public String getProduct (){
-        if (checkProduct() == true)
-        return "No products.";
-        else
-        return (getProduct1() +"\n----\n"+ getProduct2() +"\n----\n"+ getProduct3());
-    }
-    /**
-     * Returns product1's values for getProduct.
-     */
-    public String getProduct1(){
-        if (product1 != null)
-        return ("Name: "+product1.getName()+" Price: $"+product1.getPrice()+" Weight: "+product1.getWeight()+"kg Quantity: "+product1.getQuantity()+".");
-        else
-        return "Product 1 slot: empty.";
-    }
+    
     /**
      * Returns product2's values for getProduct.
      */
