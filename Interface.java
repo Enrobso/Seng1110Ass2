@@ -27,11 +27,10 @@ public class Interface
      */
     public void run(){
         initiateDepots();
-        
+        Depot.initiateSameNameArray();
         /**Input is anything but 9. The loop will continue to run.
          * Input is 9, the program exits.
          */
-       
         while (!UserInput.equals("9"))
         {
             System.out.println("\nWelcome to Alcolworths Supermarkets. ");
@@ -253,16 +252,34 @@ public class Interface
                     returnToMenu();
                 }
             }
-            if(repeatLoop == 1){
+            if((indexDepot >= 0) && (depot[indexDepot].getCounter() < 5)){
                 //depot[i]   implement a method in Depot that adds the product to depot[i].
                 System.out.println("Now enter the name of the product: ");
                 UserInput = keyboard.nextLine();
                 //Enter depot and product array check in here. If there is a product with the same name, indicate this.
-            
+                int ifNewProduct = 0;
+                for (int j = 0; j < depot.length; j++){
+                    if ((ifNewProduct == 0) && (depot[j].checkProductArray(UserInput) == 1)){
+                        System.out.println("There is a product in depot "+depot[j].getDepot()+" with the same name.");
+                        depot[j].searchProductArray(UserInput);
+                        depot[indexDepot].setSameNameArray(counter);
+                        ifNewProduct = 1;
+                    }
+                }
                 //Now set the product.
-                inputNewProduct();
-                depot[indexDepot].addProduct(UserInput, price, weight, quantity);
+                if (ifNewProduct == 1){
+                    System.out.println("Now enter the quantity. The price and weight has been copied from the other depot.");
+                    quantity = keyboard.nextInt();
+                }
+                else{
+                    inputNewProduct();
+                    depot[indexDepot].addProduct(UserInput, price, weight, quantity);
+                }
                 keyboard.nextLine();
+            }
+            else if ((indexDepot >= 0) && (depot[indexDepot].getCounter() == 5)){
+                System.out.println("Sorry, this depot is full.");
+                returnToMenu();
             }
         }
     }
