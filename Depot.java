@@ -15,7 +15,7 @@ public class Depot
     //This will be similar to the methods in Interface for the depot array.
     private Product[] product = new Product[5];
     private static Product[] productSameName = new Product[1];
-    private int counter = 0;
+    private int counterDepot = 0;
     
     //The following methods will be for the new program.
     public Depot(){
@@ -27,13 +27,13 @@ public class Depot
         }
     }
     public int getCounter(){
-        return counter;
+        return counterDepot;
     }
     /**
      * Checks if the products are all null. Returns true if so.
      */
     public boolean checkProduct(){
-        if (counter == 0)
+        if (counterDepot == 0)
         return true;
         else
         return false;
@@ -52,8 +52,6 @@ public class Depot
     //This method will be implemented in case 3. 
     //The user will be notified if there is a product already with the same inputted name.
     public Product[] searchProductArray(String inputOfUser){
-        int returnValue = 0;
-        
         for (int i = 0; i < product.length; i++){
             if (product[i].getName().equals(inputOfUser)){
                 productSameName[0].setName(product[i].getName());
@@ -72,9 +70,12 @@ public class Depot
         }
         return returnValue;
     }
-    public void setSameNameArray(int i){
-        product[i] = productSameName[0];
-        counter++;
+    public void setSameNameArray(int i, int j){
+        product[i].setName(productSameName[0].getName());
+        product[i].setPrice(productSameName[0].getPrice());
+        product[i].setWeight(productSameName[0].getWeight());
+        product[i].setQuantity(j);
+        counterDepot++;
         productArraySort();
         emptyProductSort();
     }
@@ -83,15 +84,21 @@ public class Depot
      * Postcondition: New product added to specified depot if depot is not full.
      */
     public void addProduct(String newName, double newPrice, double newWeight, int newQuantity){
-            product[counter] = new Product();
-            product[counter].setName(newName);
-            product[counter].setPrice(newPrice);
-            product[counter].setWeight(newWeight);
-            product[counter].setQuantity(newQuantity);
+            product[counterDepot] = new Product();
+            product[counterDepot].setName(newName);
+            product[counterDepot].setPrice(newPrice);
+            product[counterDepot].setWeight(newWeight);
+            product[counterDepot].setQuantity(newQuantity);
             
-            counter++;
+            counterDepot++;
             productArraySort();
             emptyProductSort();
+    }
+    public void setSameNameProductIfSameDepot(int i, String depotName){
+        for (int j = 0; j < product.length; j++){
+            if (product[j].getName().equals(depotName))
+            product[j].setQuantity(product[j].getQuantity() + i);
+        }
     }
     
     /**
