@@ -256,24 +256,32 @@ public class Interface
                 //depot[i]   implement a method in Depot that adds the product to depot[i].
                 System.out.println("Now enter the name of the product: ");
                 UserInput = keyboard.nextLine();
-                //Enter depot and product array check in here. If there is a product with the same name, indicate this.
+                //Enter depot and product array check in here. If there is a product with the same name, it indicates this.
                 int ifNewProduct = 0;
-                for (int j = 0; j < depot.length; j++){
-                    if ((ifNewProduct == 0) && (depot[j].checkProductArray(UserInput) == 1)){
-                        System.out.println("There is a product in depot "+depot[j].getDepot()+" with the same name.");
-                        depot[j].searchProductArray(UserInput);
-                        depot[indexDepot].setSameNameArray(counter);
-                        ifNewProduct = 1;
-                    }
-                }
-                //Now set the product.
-                if (ifNewProduct == 1){
-                    System.out.println("Now enter the quantity. The price and weight has been copied from the other depot.");
+                if (depot[indexDepot].checkProductArray(UserInput) == 1){
+                    System.out.println("This product already exists in this depot.");
+                    System.out.println("Enter a new quantity. This will be added to the previous quantity.");
                     quantity = keyboard.nextInt();
+                    depot[indexDepot].setSameNameProductIfSameDepot(quantity, UserInput);
+                    ifNewProduct = 1;
                 }
                 else{
+                    for (int j = 0; j < depot.length; j++){
+                        if ((ifNewProduct == 0) && (depot[j].checkProductArray(UserInput) == 1)){
+                                System.out.println("There is a product in depot "+depot[j].getDepot()+" with the same name.");
+                                depot[j].searchProductArray(UserInput);
+                                System.out.println("Now enter the quantity. The price and weight has been copied from the other depot.");
+                                quantity = keyboard.nextInt();
+                                depot[indexDepot].setSameNameArray(counter, quantity);
+                                ifNewProduct = 1;
+                            }
+                        }
+                    }
+                //Now set the product.
+                if (ifNewProduct != 1){
                     inputNewProduct();
                     depot[indexDepot].addProduct(UserInput, price, weight, quantity);
+                    
                 }
                 keyboard.nextLine();
             }
