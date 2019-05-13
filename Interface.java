@@ -44,7 +44,9 @@ public class Interface
             System.out.println("6-Query for a list of products in a depot");
             System.out.println("7-Query about the product's presence in the depots.");
             System.out.println("8-Query for the cumulative value of products in a depot.");
-            System.out.println("9-Exit");
+            System.out.println("9-Export depot and product information to a file");
+            System.out.println("10-Import depot and product information from a file");
+            System.out.println("11-Exit");
             
             //Each case has its own method called below.
             /**
@@ -96,6 +98,16 @@ public class Interface
                 case "9":
                 {
                     case9();
+                    break;
+                }
+                case "10":
+                {
+                    case10();
+                    break;
+                }
+                case "11":
+                {
+                    case11();
                     break;
                 }
                 default:
@@ -417,9 +429,23 @@ public class Interface
         returnToMenu();
     }
     /**
-     * Input is 9, the loop ends and the program terminates.
+     * Input is 9, user specifies the name of the file.
+     * Depot and product information is exported to a text file.
      */
     public void case9(){
+        
+    }
+    /**
+     * Input is 10, user specifies the file to import.
+     * The file is imported into depot and product information.
+     */
+    public void case10(){
+        
+    }
+    /**
+     * Input is 11, the loop ends and the program terminates.
+     */
+    public void case11(){
         System.out.println("Thankyou for using Alcolworths Supermarkets.");
         UserInput = "9";
     }
