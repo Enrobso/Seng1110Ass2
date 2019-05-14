@@ -49,6 +49,15 @@ public class Depot
     public String getDepot(){
         return name;
     }
+    public int getProductQty(String productName){
+        int qty = 0;
+        for (int i = 0; i < product.length; i++){
+            if (product[i].getName().equals(productName)){
+                qty = product[i].getQuantity();
+            }
+        }
+        return qty;
+    }
     //This method will be implemented in case 3. 
     //The user will be notified if there is a product already with the same inputted name.
     public Product[] searchProductArray(String inputOfUser){
@@ -151,7 +160,29 @@ public class Depot
             System.out.println(product[i].getName());
         }
     }
-    
+    public int deleteProduct(String productName, int productQty){
+        int returnNum = 0;
+        int deleteIndex = -1;
+        for (int i = 0; i < product.length; i++){
+            if (product[i].getName().equals(productName)){
+                returnNum = product[i].reduceQuantity(productQty);
+                if (returnNum == 2){
+                    deleteIndex = i;
+                }
+            }
+            else if ((i == 4) && (returnNum == 0)){
+                returnNum = 0;
+            }
+        }
+        if (returnNum == 2){
+            product[deleteIndex] = null;
+            product[deleteIndex] = new Product();
+            counterDepot--;
+            productArraySort();
+            emptyProductSort();
+        }
+        return returnNum;
+    }
     
     
     
@@ -310,7 +341,7 @@ public class Depot
      */
     public void deleteProduct(String newName){
         if (product1 != null && product1.getName().equals(newName)){
-            product1.reduceQuantity();
+            
             if (product1.getQuantity() == 0){
                 product1 = null;
                 if (product2 != null){
@@ -325,7 +356,7 @@ public class Depot
             }
         }
         else if (product2 != null && product2.getName().equals(newName)){
-            product2.reduceQuantity();
+            
             if (product2.getQuantity() == 0){
                 product2 = null;
                 if (product3 != null){
@@ -335,7 +366,7 @@ public class Depot
             }
         }
         else if (product3 != null && product3.getName().equals(newName)){
-            product3.reduceQuantity();
+            
             if (product3.getQuantity() == 0)
                 product3 = null;
         }
@@ -360,4 +391,3 @@ public class Depot
         
     }
 }
-
