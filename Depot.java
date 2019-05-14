@@ -38,19 +38,32 @@ public class Depot
         else
         return false;
     }
+    /**
+     * Initiates the products in the depots at the beginning of the program.
+     */
     public void initiateProducts(){
         for (int i = 0; i < product.length; i++){
             product[i] = new Product();
         }
     }
+    /**
+     * Sets the depot's name.
+     */
     public void setDepot(String newName){
         name = newName;
     }
+    /**
+     * Returns the specified depot's name.
+     */
     public String getDepot(){
         return name;
     }
+    /**
+     * Returns the quantity of a specified product within a depot.
+     * Returns -1 if the product was not found. 
+     */
     public int getProductQty(String productName){
-        int qty = 0;
+        int qty = -1;
         for (int i = 0; i < product.length; i++){
             if (product[i].getName().equals(productName)){
                 qty = product[i].getQuantity();
@@ -58,6 +71,10 @@ public class Depot
         }
         return qty;
     }
+    /**
+     * Precondition: a string inputted by the user. This is a name of a product.
+     * Postcondition: returns an array that matches the array of an equal named product.
+     */
     //This method will be implemented in case 3. 
     //The user will be notified if there is a product already with the same inputted name.
     public Product[] searchProductArray(String inputOfUser){
@@ -70,6 +87,9 @@ public class Depot
         }
         return productSameName;
     }
+    /**
+     * Notifies the program if there is a product within the array that has the same name as the user's input.
+     */
     public int checkProductArray(String inputOfUser){
         int returnValue = 0;
         for (int i = 0; i < product.length; i++){
@@ -79,6 +99,10 @@ public class Depot
         }
         return returnValue;
     }
+    /**
+     * Sets the specified product to the values of the product with the same name.
+     * The quantity is chosen by the user.
+     */
     public void setSameNameArray(int i, int j){
         product[i].setName(productSameName[0].getName());
         product[i].setPrice(productSameName[0].getPrice());
@@ -103,6 +127,11 @@ public class Depot
             productArraySort();
             emptyProductSort();
     }
+    /**
+     * If the user attempts to add a product with the same name as an already existing product,
+     * the user will be notified. This method takes the new quantity from the user 
+     * and adds it to the previous product quantity.
+     */
     public void setSameNameProductIfSameDepot(int i, String depotName){
         for (int j = 0; j < product.length; j++){
             if (product[j].getName().equals(depotName))
@@ -160,6 +189,11 @@ public class Depot
             System.out.println(product[i].getName());
         }
     }
+    /**
+     * Precondition: the product's name and the quantity.
+     * Postcondition: the product is found and the specified quantity is removed from the product.
+     * If an error occured the user will be notified from Interface.
+     */
     public int deleteProduct(String productName, int productQty){
         int returnNum = 0;
         int deleteIndex = -1;
@@ -391,3 +425,4 @@ public class Depot
         
     }
 }
+
