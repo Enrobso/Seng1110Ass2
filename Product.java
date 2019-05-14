@@ -93,8 +93,20 @@ public class Product
      * Reduces the quantity of the product by 1.
      * The user can remove one of a product.
      */
-    public void reduceQuantity(){
-        quantity -= 1;
+    public int reduceQuantity(int qtyReduce){
+        int returnNo = -1;
+        if ((quantity - qtyReduce) < 0){
+            returnNo = 1;
+        }
+        else if ((quantity - qtyReduce) == 0){
+            quantity -= qtyReduce;
+            returnNo = 2;
+        }
+        else if ((quantity - qtyReduce) > 0){
+            quantity -= qtyReduce;
+            returnNo = 3;
+        }
+        return returnNo;
     }
 
 }
