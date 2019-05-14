@@ -303,17 +303,9 @@ public class Interface
             }
         }
     }
-    /**
-     * This method was added to reduce repetitive code.
-     */
-    public String productDelete(){
-        System.out.println("Enter the product you wish to delete:");
-        UserInput = keyboard.nextLine();
-        return UserInput;
-    }
     
     /**
-     * Input is 4, the user can remove one item of a product from a depot. The quantity is reduced by 1.
+     * Input is 4, the user can remove any specified number of items of a product from a depot.
      * If the quantity becomes 0. the product is deleted.
      */
     public void case4(){
@@ -321,22 +313,34 @@ public class Interface
             printDepots();
         }
         else{
+            int depotIndex = -1;
             System.out.println("Enter the depot of the product you wish to remove:");
             UserInput = keyboard.nextLine();
-            if (depot1 != null && depot1.getName().equals(UserInput)){
-                System.out.println("Enter the product you wish to delete:");
-                UserInput = keyboard.nextLine();
-                depot1.deleteProduct(UserInput);
+            for (int i = 0; i < depot.length; i++){
+                if (depot[i].getDepot().equals(UserInput)){
+                    depotIndex = i;
+                }
             }
-            else if (depot2 != null && depot2.getName().equals(UserInput)){
-                System.out.println("Enter the product you wish to delete:");
-                UserInput = keyboard.nextLine();
-                depot2.deleteProduct(UserInput);
+            System.out.println("Enter the product and the quantity of it you wish to delete:");
+            UserInput = keyboard.nextLine();
+            quantity = keyboard.nextInt();
+            
+            int checkForProduct = depot[depotIndex].deleteProduct(UserInput, quantity);
+            if (checkForProduct == 0 ){
+                System.out.println("Sorry, that product doesn't exist. ");
             }
-            else{
-                System.out.println("Sorry, that does not match any depots.");
+            else if (checkForProduct == 1 ){
+                System.out.println("Sorry, "+UserInput+" only has "+depot[depotIndex].getProductQty(UserInput)+" items in depot "+depot[depotIndex].getName()+".");
+            }
+            else if (checkForProduct == 2 ){
+                System.out.println(UserInput+" is now removed from the depot.");
+            }
+            else if (checkForProduct == 3 ){
+                System.out.println(quantity +" items of product "+UserInput+" deleted from depot "+depot[depotIndex].getDepot()+".");
             }
         }
+        keyboard.nextLine();
+        returnToMenu();
     }
     
     /**
