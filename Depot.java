@@ -190,6 +190,19 @@ public class Depot
         }
     }
     /**
+     * This is for exporting the depot and product information to a txt file.
+     */
+    public String exportProducts(){
+        String outputFile = "";
+        for (int i = 0; i < counterDepot; i++){
+            if ((counterDepot > 1) && ((i < (counterDepot-1))))
+                outputFile += (name+ " "+product[i].getName()+" "+product[i].getPrice()+" "+product[i].getWeight()+" "+product[i].getQuantity()+",");
+            else
+                outputFile += (name+ " "+product[i].getName()+" "+product[i].getPrice()+" "+product[i].getWeight()+" "+product[i].getQuantity());
+        }
+        return outputFile;
+    }
+    /**
      * Precondition: the product's name and the quantity.
      * Postcondition: the product is found and the specified quantity is removed from the product.
      * If an error occured the user will be notified from Interface.
