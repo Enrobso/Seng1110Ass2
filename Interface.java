@@ -1,5 +1,5 @@
 import java.util.Scanner;
-
+import java.io.*;
 /*
 Title: Interface
 Authors: Ephream Osborne, Ethan Sarginson 
@@ -187,12 +187,10 @@ public class Interface
             System.out.println("Enter the name of the new depot:");
             UserInput = keyboard.nextLine();
             for (int i = 0; i < depot.length; i++){
-                if (depot[i].getDepot().equals(UserInput)){
                     while (depot[i].getDepot().equals(UserInput)){
                         System.out.println("Sorry, that depot already exists, try again.");
                         UserInput = keyboard.nextLine();
                     }
-                }
             }
             depot[counter].setDepot(UserInput);
             counter++;
@@ -316,30 +314,37 @@ public class Interface
             int depotIndex = -1;
             System.out.println("Enter the depot of the product you wish to remove:");
             UserInput = keyboard.nextLine();
+            
             for (int i = 0; i < depot.length; i++){
                 if (depot[i].getDepot().equals(UserInput)){
                     depotIndex = i;
                 }
             }
-            System.out.println("Enter the product and the quantity of it you wish to delete:");
-            UserInput = keyboard.nextLine();
-            quantity = keyboard.nextInt();
+            if (depotIndex != -1){
+                System.out.println("Enter the product and the quantity of it you wish to delete:");
+                UserInput = keyboard.nextLine();
+                quantity = keyboard.nextInt();
             
-            int checkForProduct = depot[depotIndex].deleteProduct(UserInput, quantity);
-            if (checkForProduct == 0 ){
-                System.out.println("Sorry, that product doesn't exist. ");
+                int checkForProduct = depot[depotIndex].deleteProduct(UserInput, quantity);
+                if (checkForProduct == 0 ){
+                    System.out.println("Sorry, that product doesn't exist. ");
+                }
+                else if (checkForProduct == 1 ){
+                    System.out.println("Sorry, "+UserInput+" only has "+depot[depotIndex].getProductQty(UserInput)+" items in depot "+depot[depotIndex].getName()+".");
+                }
+                else if (checkForProduct == 2 ){
+                    System.out.println(UserInput+" is now removed from the depot.");
+                }
+                else if (checkForProduct == 3 ){
+                    System.out.println(quantity +" items of product "+UserInput+" deleted from depot "+depot[depotIndex].getDepot()+".");
+                }
+                keyboard.nextLine();
             }
-            else if (checkForProduct == 1 ){
-                System.out.println("Sorry, "+UserInput+" only has "+depot[depotIndex].getProductQty(UserInput)+" items in depot "+depot[depotIndex].getName()+".");
-            }
-            else if (checkForProduct == 2 ){
-                System.out.println(UserInput+" is now removed from the depot.");
-            }
-            else if (checkForProduct == 3 ){
-                System.out.println(quantity +" items of product "+UserInput+" deleted from depot "+depot[depotIndex].getDepot()+".");
+            else{
+                System.out.println("Sorry that depot doesn't exist.");
             }
         }
-        keyboard.nextLine();
+        
         returnToMenu();
     }
     
@@ -437,7 +442,41 @@ public class Interface
      * Depot and product information is exported to a text file.
      */
     public void case9(){
+        String fileName = "";
+        System.out.println("Enter the name of the new file:");
+        fileName = keyboard.nextLine();
+        fileName = fileName+".txt";
         
+        PrintWriter outputStream = null;
+        try {
+            outputStream = new PrintWriter(fileName);
+        }
+        catch(FileNotFoundException e){
+            System.out.println("Error opening the file "+fileName);
+        }
+        
+        String line = "";;
+        String[] outputLine = new String[5];
+        for (int i = 0; i < counter; i++){
+            if (depot[i].getCounter() == 0){
+                outputStream.println(depot[i].getDepot());
+            }
+            else{
+                line = depot[i].exportProducts();
+                if (depot[i].getCounter() == 1){
+                    outputStream.println(line);
+                }
+                else{
+                    outputLine = line.split(",");
+                    for (int j = 0; j < depot[i].getCounter(); j++){
+                        outputStream.println(outputLine[j]);
+                    }
+                }
+            }
+        }
+        outputStream.close();
+        System.out.println("The lines were written to the text file "+fileName);
+        returnToMenu();
     }
     /**
      * Input is 10, user specifies the file to import.
