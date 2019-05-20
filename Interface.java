@@ -455,7 +455,7 @@ public class Interface
             System.out.println("Error opening the file "+fileName);
         }
         
-        String line = "";;
+        String line = "";
         String[] outputLine = new String[5];
         for (int i = 0; i < counter; i++){
             if (depot[i].getCounter() == 0){
@@ -483,8 +483,77 @@ public class Interface
      * The file is imported into depot and product information.
      */
     public void case10(){
-        
+        //In order to import the file, the arrays need to be empty.
+        //If there are depots existing, the user can choose to save them as a .txt file.
+        if (counter == 0){
+            //There are no depots, so you can freely import the file.
+        }
+        else{
+            //There are some depots. Ask the user if he desires to save this file. Then export.
+            System.out.println("Do you wish to save your depots and products so far?");
+            System.out.println("Yes or No");
+            UserInput = keyboard.nextLine();
+            if (UserInput.equalsIgnoreCase("yes")){
+                case9();
+                counter = 0;
+                for (int i = 0; i < depot.length; i++){
+                    depot[i] = null;
+                    depot[i] = new Depot();
+                }
+                
+                
+            }
+            else{
+                counter = 0;
+                for (int i = 0; i < depot.length; i++){
+                    depot[i] = null;
+                    depot[i] = new Depot();
+                }
+                
+                
+            }
+        }
     }
+    //This method will be referenced in case10, rather than copy paste this code 3 times.
+    public void importFile(){
+        String fileName;
+        System.out.println("Enter the name of the file you wish to import:");
+        fileName = keyboard.nextLine();
+        
+        Scanner inputStream = null;
+        try{
+            inputStream = new Scanner(new File(fileName));
+        }
+        catch(FileNotFoundException e){
+            System.out.println("There was an error in opening the file "+fileName);
+            System.exit(0);
+        }
+        
+        System.out.println("The file "+fileName+" contains the following lines:");
+        
+        while(inputStream.hasNextLine()){
+            String line = inputStream.nextLine();
+            line = line.trim();
+            boolean newDepot = line.contains(" ");
+            if (!newDepot){
+            //Add a new depot with no product info.
+            //Check if the depot already exists.
+            }
+            else{
+            //Add a depot that may or may not be new, with the new product.
+            
+            //if there are 5 products already, show error.
+            
+            //If there are repeated names in same depot, do something.
+            
+            //If there are 4 depots already show error
+            
+            }
+            
+        }
+        inputStream.close();
+    }
+    
     /**
      * Input is 11, the loop ends and the program terminates.
      */
