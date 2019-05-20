@@ -8,7 +8,6 @@ This class contains all the details of the depot.
 public class Depot
 {
     //These are the instance variables for the old program.
-    private String name;
     private Product product1, product2, product3, product4, product5;
     
     //These are for the new program.
@@ -16,7 +15,7 @@ public class Depot
     private Product[] product = new Product[5];
     private static Product[] productSameName = new Product[1];
     private int counterDepot = 0;
-    
+    private String name;
     //The following methods will be for the new program.
     public Depot(){
         name = "Empty";
