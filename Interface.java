@@ -167,7 +167,7 @@ public class Interface
      */
     //This will probably be a method in the depot class. Will have to see later on. 
     public void inputNewProduct(){
-        System.out.println("Now enter the price (dollars), weight (kilograms) and quanity in that order.");
+        System.out.println("Now enter the price (dollars), weight (kilograms) and quantity in that order.");
         price = keyboard.nextDouble();
         weight = keyboard.nextDouble();
         quantity = keyboard.nextInt();    
@@ -186,12 +186,15 @@ public class Interface
         if (counter < 4){
             System.out.println("Enter the name of the new depot:");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
+            
             for (int i = 0; i < depot.length; i++){
                     while (depot[i].getDepot().equals(UserInput)){
                         System.out.println("Sorry, that depot already exists, try again.");
                         UserInput = keyboard.nextLine();
                     }
             }
+            UserInput = UserInput.toLowerCase();
             depot[counter].setDepot(UserInput);
             counter++;
             depotArraySort();
@@ -217,6 +220,7 @@ public class Interface
             //We then sort the array so the empty space is equal to counter.
             System.out.println("Enter the name of the depot you wish to delete:");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
             int repeatLoop = 0;
             do{
                 for (int i = 0; i < depot.length; i++){
@@ -228,6 +232,7 @@ public class Interface
                     if((repeatLoop == 0) && (i == 3)){
                         System.out.println("Sorry that did not match any of the depots. Try again.");
                         UserInput = keyboard.nextLine();
+                        UserInput = UserInput.toLowerCase();
                     }
                 }
             }while(repeatLoop == 0);
@@ -249,6 +254,7 @@ public class Interface
         else{
             System.out.println("Type the depot you want to add a product too");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
             //A product is added to a specified depot.
             int indexDepot = -1;
             int repeatLoop = 0;
@@ -266,6 +272,7 @@ public class Interface
                 //depot[i]   implement a method in Depot that adds the product to depot[i].
                 System.out.println("Now enter the name of the product: ");
                 UserInput = keyboard.nextLine();
+                UserInput = UserInput.toLowerCase();
                 //Enter depot and product array check in here. If there is a product with the same name, it indicates this.
                 int ifNewProduct = 0;
                 if (depot[indexDepot].checkProductArray(UserInput) == 1){
@@ -314,6 +321,7 @@ public class Interface
             int depotIndex = -1;
             System.out.println("Enter the depot of the product you wish to remove:");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
             
             for (int i = 0; i < depot.length; i++){
                 if (depot[i].getDepot().equals(UserInput)){
@@ -323,6 +331,7 @@ public class Interface
             if (depotIndex != -1){
                 System.out.println("Enter the product and the quantity of it you wish to delete:");
                 UserInput = keyboard.nextLine();
+                UserInput = UserInput.toLowerCase();
                 quantity = keyboard.nextInt();
             
                 int checkForProduct = depot[depotIndex].deleteProduct(UserInput, quantity);
@@ -374,6 +383,7 @@ public class Interface
         else{
             System.out.println("which depot do you want to query for products:");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
             int repeatLoop = 0;
             for (int i = 0; i < depot.length; i++){
                 if (depot[i].getDepot().equals(UserInput)){
@@ -398,6 +408,7 @@ public class Interface
         else {
             System.out.println("Enter the name of the product you wish to query:");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
             if ((depot1 != null) && (depot1.searchProducts(UserInput) != 0)){
                 if ((depot2 != null) && (depot2.searchProducts(UserInput) != 0)){
                     System.out.println("Product "+UserInput+" is in depots "+depot1.getName()+" and "+depot2.getName() +" with quantity "+(depot1.searchProducts(UserInput)+depot2.searchProducts(UserInput)));
@@ -425,6 +436,7 @@ public class Interface
         else{
             System.out.println("Enter the name of the depot you wish to check to cumulative product value of:");
             UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
             if (depot1 != null && depot1.getName().equals(UserInput)){
                 System.out.println("The cumulative value of depot "+depot1.getName()+" is $"+depot1.getDepotValue());
             }
@@ -467,6 +479,8 @@ public class Interface
                     outputStream.println(line);
                 }
                 else{
+                    //If there are multiple products, the string returned from exportProducts() is all of the products together.
+                    //A comma is placed between each line of products. This is split here.
                     outputLine = line.split(",");
                     for (int j = 0; j < depot[i].getCounter(); j++){
                         outputStream.println(outputLine[j]);
@@ -483,40 +497,9 @@ public class Interface
      * The file is imported into depot and product information.
      */
     public void case10(){
-        //In order to import the file, the arrays need to be empty.
-        //If there are depots existing, the user can choose to save them as a .txt file.
-        if (counter == 0){
-            //There are no depots, so you can freely import the file.
-        }
-        else{
-            //There are some depots. Ask the user if he desires to save this file. Then export.
-            System.out.println("Do you wish to save your depots and products so far?");
-            System.out.println("Yes or No");
-            UserInput = keyboard.nextLine();
-            if (UserInput.equalsIgnoreCase("yes")){
-                case9();
-                counter = 0;
-                for (int i = 0; i < depot.length; i++){
-                    depot[i] = null;
-                    depot[i] = new Depot();
-                }
-                
-                
-            }
-            else{
-                counter = 0;
-                for (int i = 0; i < depot.length; i++){
-                    depot[i] = null;
-                    depot[i] = new Depot();
-                }
-                
-                
-            }
-        }
-    }
-    //This method will be referenced in case10, rather than copy paste this code 3 times.
-    public void importFile(){
+        //The .txt file is added to the existing depot and product arrays.
         String fileName;
+        String[] importArray = new String[5];
         System.out.println("Enter the name of the file you wish to import:");
         fileName = keyboard.nextLine();
         
@@ -529,29 +512,120 @@ public class Interface
             System.exit(0);
         }
         
-        System.out.println("The file "+fileName+" contains the following lines:");
-        
-        while(inputStream.hasNextLine()){
-            String line = inputStream.nextLine();
-            line = line.trim();
-            boolean newDepot = line.contains(" ");
+        while(inputStream.hasNextLine() && (counter < 4)){
+            UserInput = inputStream.nextLine();
+            UserInput = UserInput.trim();
+            boolean newDepot = UserInput.contains(" ");
+            
             if (!newDepot){
-            //Add a new depot with no product info.
-            //Check if the depot already exists.
+                //Add a new depot with no product info.
+                //Check if the depot already exists.
+                //If the depot already exists, that depot will be used.
+                
+                //A line with no spaces is a depot only.
+                int i = -1;
+                UserInput = UserInput.toLowerCase();
+                for (int j = 0; j < depot.length; j++){
+                    if(depot[j].getDepot().equals(UserInput)){
+                        i = j;
+                    }
+                }
+                if (i != -1){
+                    System.out.println("The depot "+UserInput+" already exists.");
+                    System.out.println("That depot will be used.");
+                }
+                else{
+                    depot[counter].setDepot(UserInput);
+                    counter++;
+                    depotArraySort();
+                    arraySortEmpty();
+                    System.out.println("The depot "+UserInput+" was successfully added.");
+                }
             }
             else{
-            //Add a depot that may or may not be new, with the new product.
-            
-            //if there are 5 products already, show error.
-            
-            //If there are repeated names in same depot, do something.
-            
-            //If there are 4 depots already show error
-            
+                //Add a depot that may or may not be new, with the new product.
+                int checkForException = 0;
+                //Check if the format in the line is correct.
+                //Otherwise there is an exception and then the next line is tested.
+                try{
+                    importArray = UserInput.split(" ");
+                    importArray[0] = importArray[0].toLowerCase();
+                    importArray[1] = importArray[1].toLowerCase();
+                    price = Double.parseDouble(importArray[2]);
+                    weight = Double.parseDouble(importArray[3]);
+                    quantity = Integer.parseInt(importArray[4]);
+                }
+                catch(Exception e){
+                    System.out.println("There was an error in the format of this line.");
+                    checkForException = 1;
+                }
+                if (checkForException == 0){
+                    int j = -1;
+                    for (int i = 0; i < depot.length; i++){
+                        if (depot[i].getDepot().equals(importArray[0])){
+                            j = i;
+                        }
+                    }
+                    if (j != -1){
+                        System.out.println("There is a depot called "+importArray[0]+" already.");
+                        System.out.println("We will use that depot.");
+                    }
+                    else{
+                        depot[counter].setDepot(importArray[0]);
+                        counter++;
+                        depotArraySort();
+                        arraySortEmpty();
+                    }
+                
+                    int indexDepot = -1;
+                    for (int i = 0; i < depot.length; i++){
+                        if (depot[i].getDepot().equals(importArray[0])){
+                            indexDepot = i;
+                        }
+                    }
+                    if((indexDepot >= 0) && (depot[indexDepot].getCounter() < 5)){
+                        //depot[i]   implement a method in Depot that adds the product to depot[i].
+                        //Enter depot and product array check in here. If there is a product with the same name, it indicates this.
+                        int ifNewProduct = 0;
+                        if (depot[indexDepot].checkProductArray(importArray[1]) == 1){
+                            System.out.println("The product "+importArray[1]+" already exists in this depot.");
+                            System.out.println("The quantity will be taken from the .txt file.");
+                    
+                            depot[indexDepot].setSameNameProductIfSameDepot(quantity, importArray[1]);
+                            ifNewProduct = 1;
+                        }
+                        else{
+                            for (int k = 0; k < depot.length; k++){
+                                if ((ifNewProduct == 0) && (depot[k].checkProductArray(importArray[1]) == 1)){
+                                    System.out.println("There is a product in depot "+depot[k].getDepot()+" with the same name.");
+                                    depot[k].searchProductArray(importArray[1]);
+                                    System.out.println("The quantity will be taken from the .txt file. The price and weight has been copied from the other depot.");
+                                
+                                    depot[indexDepot].setSameNameArray(counter, quantity);
+                                    ifNewProduct = 1;
+                                }
+                            }
+                        }
+                        //Now set the product.
+                        if (ifNewProduct != 1){
+                            depot[indexDepot].addProduct(importArray[1], price, weight, quantity);
+                        }
+                
+                    }
+                    else{
+                        System.out.println("Sorry, that depot is full.");
+                    }
+                }
+                else{
+                    System.out.println("There was an error in the formatting of the line.");
+                    checkForException = 0;
+                }
+        
             }
-            
+        
         }
         inputStream.close();
+        returnToMenu();
     }
     
     /**
