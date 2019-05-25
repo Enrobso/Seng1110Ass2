@@ -161,18 +161,6 @@ public class Interface
     public void printDepots(){
         System.out.println("Sorry, you do not have any depots.");
         }
-      
-    /**
-     * This is invoked in case 3 to reduce repetion of same code.
-     */
-    //This will probably be a method in the depot class. Will have to see later on. 
-    public void inputNewProduct(){
-        System.out.println("Now enter the price (dollars), weight (kilograms) and quantity in that order.");
-        price = keyboard.nextDouble();
-        weight = keyboard.nextDouble();
-        quantity = keyboard.nextInt();    
-    }
-    
     //This could be a method implemented to reduce copy-paste.
     /*public void checkDepotMatch(){
         
@@ -189,13 +177,13 @@ public class Interface
             UserInput = UserInput.toLowerCase();
             
             for (int i = 0; i < depot.length; i++){
-                    while (depot[i].getDepot().equals(UserInput)){
+                    while (depot[i].getName().equals(UserInput)){
                         System.out.println("Sorry, that depot already exists, try again.");
                         UserInput = keyboard.nextLine();
                     }
             }
             UserInput = UserInput.toLowerCase();
-            depot[counter].setDepot(UserInput);
+            depot[counter].setName(UserInput);
             counter++;
             depotArraySort();
             arraySortEmpty();
@@ -222,23 +210,21 @@ public class Interface
             UserInput = keyboard.nextLine();
             UserInput = UserInput.toLowerCase();
             int repeatLoop = 0;
-            do{
-                for (int i = 0; i < depot.length; i++){
-                    if (depot[i].getDepot().equals(UserInput)){
-                        depot[i] = null;
-                        depot[i] = new Depot();
-                        repeatLoop = 1;
-                    }
-                    if((repeatLoop == 0) && (i == 3)){
-                        System.out.println("Sorry that did not match any of the depots. Try again.");
-                        UserInput = keyboard.nextLine();
-                        UserInput = UserInput.toLowerCase();
-                    }
+            for (int i = 0; i < depot.length; i++){
+                if (depot[i].getName().equals(UserInput)){
+                    depot[i] = null;
+                    depot[i] = new Depot();
+                    repeatLoop = 1;
                 }
-            }while(repeatLoop == 0);
-            counter--;
-            depotArraySort();
-            arraySortEmpty();
+                if((repeatLoop == 0) && (i == 3)){
+                    System.out.println("Sorry that did not match any of the depots.");
+                }
+            }
+            if(repeatLoop == 1){
+                counter--;
+                depotArraySort();
+                arraySortEmpty();
+            }
         }
         returnToMenu();
     }
@@ -259,7 +245,7 @@ public class Interface
             int indexDepot = -1;
             int repeatLoop = 0;
             for (int i = 0; i < depot.length; i++){
-                if (depot[i].getDepot().equals(UserInput)){
+                if (depot[i].getName().equals(UserInput)){
                     indexDepot = i;
                     repeatLoop = 1;
                 }
@@ -279,16 +265,24 @@ public class Interface
                     System.out.println("This product already exists in this depot.");
                     System.out.println("Enter a new quantity. This will be added to the previous quantity.");
                     quantity = keyboard.nextInt();
+                    while (quantity <= 0){
+                        System.out.println("Sorry, the quantity needs to be a positive integer. Try again.");
+                        quantity = keyboard.nextInt();
+                    }
                     depot[indexDepot].setSameNameProductIfSameDepot(quantity, UserInput);
                     ifNewProduct = 1;
                 }
                 else{
                     for (int j = 0; j < depot.length; j++){
                         if ((ifNewProduct == 0) && (depot[j].checkProductArray(UserInput) == 1)){
-                                System.out.println("There is a product in depot "+depot[j].getDepot()+" with the same name.");
+                                System.out.println("There is a product in depot "+depot[j].getName()+" with the same name.");
                                 depot[j].searchProductArray(UserInput);
                                 System.out.println("Now enter the quantity. The price and weight has been copied from the other depot.");
                                 quantity = keyboard.nextInt();
+                                while (quantity <= 0){
+                                    System.out.println("Sorry, the quantity needs to be a positive integer. Try again.");
+                                    quantity = keyboard.nextInt();
+                                }
                                 depot[indexDepot].setSameNameArray(counter, quantity);
                                 ifNewProduct = 1;
                             }
@@ -296,9 +290,23 @@ public class Interface
                     }
                 //Now set the product.
                 if (ifNewProduct != 1){
-                    inputNewProduct();
+                    System.out.println("Now enter the price, weight and quantity in that order:");
+                    price = keyboard.nextDouble();
+                    while (price <= 0){
+                        System.out.println("Sorry, the price needs to be positive. Try again.");
+                        price = keyboard.nextInt();
+                    }
+                    weight = keyboard.nextDouble();
+                    while (weight <= 0){
+                        System.out.println("Sorry, the weight needs to be positive. Try again.");
+                        weight = keyboard.nextInt();
+                    }
+                    quantity = keyboard.nextInt();
+                    while (quantity <= 0){
+                        System.out.println("Sorry, the quantity needs to be a positive integer. Try again.");
+                        quantity = keyboard.nextInt();
+                    }
                     depot[indexDepot].addProduct(UserInput, price, weight, quantity);
-                    
                 }
                 keyboard.nextLine();
             }
@@ -324,7 +332,7 @@ public class Interface
             UserInput = UserInput.toLowerCase();
             
             for (int i = 0; i < depot.length; i++){
-                if (depot[i].getDepot().equals(UserInput)){
+                if (depot[i].getName().equals(UserInput)){
                     depotIndex = i;
                 }
             }
@@ -333,7 +341,10 @@ public class Interface
                 UserInput = keyboard.nextLine();
                 UserInput = UserInput.toLowerCase();
                 quantity = keyboard.nextInt();
-            
+                while (quantity <= 0){
+                        System.out.println("Sorry, the quantity needs to be a positive integer. Try again.");
+                        quantity = keyboard.nextInt();
+                    }
                 int checkForProduct = depot[depotIndex].deleteProduct(UserInput, quantity);
                 if (checkForProduct == 0 ){
                     System.out.println("Sorry, that product doesn't exist. ");
@@ -345,7 +356,7 @@ public class Interface
                     System.out.println(UserInput+" is now removed from the depot.");
                 }
                 else if (checkForProduct == 3 ){
-                    System.out.println(quantity +" items of product "+UserInput+" deleted from depot "+depot[depotIndex].getDepot()+".");
+                    System.out.println(quantity +" items of product "+UserInput+" deleted from depot "+depot[depotIndex].getName()+".");
                 }
                 keyboard.nextLine();
             }
@@ -364,7 +375,7 @@ public class Interface
         System.out.println("The names of the depots will appear below.");
         if (counter != 0){
             for (int i = 0; i < depot.length; i++){
-                System.out.println(depot[i].getDepot());
+                System.out.println(depot[i].getName());
             }
         }
         else{
@@ -386,7 +397,7 @@ public class Interface
             UserInput = UserInput.toLowerCase();
             int repeatLoop = 0;
             for (int i = 0; i < depot.length; i++){
-                if (depot[i].getDepot().equals(UserInput)){
+                if (depot[i].getName().equals(UserInput)){
                     depot[i].getProduct();
                     repeatLoop = 1;
                 }
@@ -409,22 +420,19 @@ public class Interface
             System.out.println("Enter the name of the product you wish to query:");
             UserInput = keyboard.nextLine();
             UserInput = UserInput.toLowerCase();
-            if ((depot1 != null) && (depot1.searchProducts(UserInput) != 0)){
-                if ((depot2 != null) && (depot2.searchProducts(UserInput) != 0)){
-                    System.out.println("Product "+UserInput+" is in depots "+depot1.getName()+" and "+depot2.getName() +" with quantity "+(depot1.searchProducts(UserInput)+depot2.searchProducts(UserInput)));
+            int exist = 0;
+            for (int i = 0; i < counter; i++){
+                if (depot[i].getProductQty(UserInput)!=-1){
+                    System.out.println("Product "+UserInput+" is in Depot "+depot[i].getName()+" with quantity " +depot[i].getProductQty(UserInput));
+                    exist += depot[i].getProductQty(UserInput);
                 }
-                else{
-                    System.out.println("Product "+UserInput+" is in depot "+depot1.getName()+" with quantity "+depot1.searchProducts(UserInput));
-                }
             }
-            else if (!((depot1 != null) && (depot1.searchProducts(UserInput) != 0)) && ((depot2 != null) && (depot2.searchProducts(UserInput) != 0))){
-                System.out.println("Product "+UserInput+" is in depot "+depot2.getName()+" with quantity "+depot2.searchProducts(UserInput));
+            if (exist == 0){
+                System.out.println("Sorry, this product does not exist.");
             }
-            else{
-                System.out.println("Sorry that does not match any listed products.");
-            }
+            
+            returnToMenu();
         }
-        returnToMenu();
     }
     /**
      * Input is 8, the user can check for the cumulative cost of all the products in the depot.
@@ -434,18 +442,7 @@ public class Interface
             printDepots();
         }
         else{
-            System.out.println("Enter the name of the depot you wish to check to cumulative product value of:");
-            UserInput = keyboard.nextLine();
-            UserInput = UserInput.toLowerCase();
-            if (depot1 != null && depot1.getName().equals(UserInput)){
-                System.out.println("The cumulative value of depot "+depot1.getName()+" is $"+depot1.getDepotValue());
-            }
-            else if (depot2 != null && depot2.getName().equals(UserInput)){
-                System.out.println("The cumulative value of depot "+depot2.getName()+" is $"+depot2.getDepotValue());   
-            }
-            else{
-                System.out.println("Sorry, that does not match any of the depots listed.");
-            }
+            
         }
         returnToMenu();
     }
@@ -457,6 +454,7 @@ public class Interface
         String fileName = "";
         System.out.println("Enter the name of the new file:");
         fileName = keyboard.nextLine();
+        if(!fileName.contains(".txt"))
         fileName = fileName+".txt";
         
         PrintWriter outputStream = null;
@@ -471,7 +469,7 @@ public class Interface
         String[] outputLine = new String[5];
         for (int i = 0; i < counter; i++){
             if (depot[i].getCounter() == 0){
-                outputStream.println(depot[i].getDepot());
+                outputStream.println(depot[i].getName());
             }
             else{
                 line = depot[i].exportProducts();
@@ -526,7 +524,7 @@ public class Interface
                 int i = -1;
                 UserInput = UserInput.toLowerCase();
                 for (int j = 0; j < depot.length; j++){
-                    if(depot[j].getDepot().equals(UserInput)){
+                    if(depot[j].getName().equals(UserInput)){
                         i = j;
                     }
                 }
@@ -535,7 +533,7 @@ public class Interface
                     System.out.println("That depot will be used.");
                 }
                 else{
-                    depot[counter].setDepot(UserInput);
+                    depot[counter].setName(UserInput);
                     counter++;
                     depotArraySort();
                     arraySortEmpty();
@@ -559,10 +557,36 @@ public class Interface
                     System.out.println("There was an error in the format of this line.");
                     checkForException = 1;
                 }
+                boolean posPrice = price > 0;
+                boolean posWeight = weight > 0;
+                boolean posQuantity = quantity > 0;
+                if (!posPrice){
+                    System.out.println("The price is negative on this line. This line will be skipped.");
+                    checkForException = 1;
+                }
+                if (!posWeight){
+                    if (checkForException == 1){
+                        System.out.println("The weight is also negative.");
+                    }
+                    else{
+                        System.out.println("The weight is negative on this line. This line will be skipped.");
+                        checkForException = 1;
+                    }
+                }
+                if(!posQuantity){
+                    if(checkForException == 1){
+                        System.out.println("The quantity is also negative.");
+                    }
+                    else{
+                        System.out.println("The quantity is negative on this line. This line will be skipped.");
+                        checkForException = 1;
+                    }
+                }
+                
                 if (checkForException == 0){
                     int j = -1;
                     for (int i = 0; i < depot.length; i++){
-                        if (depot[i].getDepot().equals(importArray[0])){
+                        if (depot[i].getName().equals(importArray[0])){
                             j = i;
                         }
                     }
@@ -571,7 +595,7 @@ public class Interface
                         System.out.println("We will use that depot.");
                     }
                     else{
-                        depot[counter].setDepot(importArray[0]);
+                        depot[counter].setName(importArray[0]);
                         counter++;
                         depotArraySort();
                         arraySortEmpty();
@@ -579,7 +603,7 @@ public class Interface
                 
                     int indexDepot = -1;
                     for (int i = 0; i < depot.length; i++){
-                        if (depot[i].getDepot().equals(importArray[0])){
+                        if (depot[i].getName().equals(importArray[0])){
                             indexDepot = i;
                         }
                     }
@@ -597,7 +621,7 @@ public class Interface
                         else{
                             for (int k = 0; k < depot.length; k++){
                                 if ((ifNewProduct == 0) && (depot[k].checkProductArray(importArray[1]) == 1)){
-                                    System.out.println("There is a product in depot "+depot[k].getDepot()+" with the same name.");
+                                    System.out.println("There is a product in depot "+depot[k].getName()+" with the same name.");
                                     depot[k].searchProductArray(importArray[1]);
                                     System.out.println("The quantity will be taken from the .txt file. The price and weight has been copied from the other depot.");
                                 
@@ -616,8 +640,11 @@ public class Interface
                         System.out.println("Sorry, that depot is full.");
                     }
                 }
-                else{
+                else if ((checkForException == 1) && posPrice && posWeight && posQuantity){
                     System.out.println("There was an error in the formatting of the line.");
+                    checkForException = 0;
+                }
+                else{
                     checkForException = 0;
                 }
         
@@ -648,7 +675,7 @@ public class Interface
     public void depotArraySort(){
         for (int i = 0; i< depot.length; i++){
             for (int j = i + 1; j < depot.length; j++){
-                if (depot[i].getDepot().compareTo(depot[j].getDepot()) > 0){
+                if (depot[i].getName().compareTo(depot[j].getName()) > 0){
                     Depot aux = depot[i];
                     depot[i] = depot[j];
                     depot[j] = aux;
@@ -663,7 +690,7 @@ public class Interface
     public void arraySortEmpty(){
     for (int i = 0; i < depot.length; i++){
             for (int j = i + 1; j < depot.length; j++){
-                if (depot[i].getDepot().equals("Empty") && !(depot[j].getDepot().equals("Empty"))){
+                if (depot[i].getName().equals("Empty") && !(depot[j].getName().equals("Empty"))){
                     Depot aux = depot[i];
                     depot[i] = depot[j];
                     depot[j] = aux;
