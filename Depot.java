@@ -229,5 +229,11 @@ public class Depot
         }
         return returnNum;
     }
-    
+    public double getProductPrice(){
+        double sum = 0;
+        for (int i = 0; i < product.length; i++){
+            sum += product[i].getPrice()*product[i].getQuantity();
+        }
+        return sum;
+    }
 }   

@@ -442,7 +442,19 @@ public class Interface
             printDepots();
         }
         else{
-            
+            System.out.println("Enter the name of the depot you wish to query:");
+            UserInput = keyboard.nextLine();
+            UserInput = UserInput.toLowerCase();
+            int repeatLoop = 0;
+            for (int i = 0; i < depot.length; i++){
+                if (depot[i].getName().equals(UserInput)){
+                    System.out.println("Depot "+depot[i].getName()+" has cumulative product value $"+depot[i].getProductPrice()+".");
+                    repeatLoop = 1;
+                }
+                if((repeatLoop == 0) && (i == 3)){
+                    System.out.println("Sorry that did not match any of the depots.");
+                }
+            }    
         }
         returnToMenu();
     }
