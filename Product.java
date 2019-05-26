@@ -2,7 +2,7 @@
 Title: Product
 Author: Ephream Osborne, Ethan Sarginson
 Student number: C3279393, C3329758
-Last update: 8/5/2019
+Last update: 27/5/2019
 This class contains all the details of the product.
 */
 public class Product
