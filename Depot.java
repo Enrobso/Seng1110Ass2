@@ -2,14 +2,11 @@
 Title: Depot
 Authors: Ephream Osborne, Ethan Sarginson
 Student number: C3279393, C3329758
-Last update: 8/5/2019
+Last update: 27/5/2019
 This class contains all the details of the depot.
 */
 public class Depot
 {
-    //These are the instance variables for the old program.
-    private Product product1, product2, product3, product4, product5;
-    
     //These are for the new program.
     //This will be similar to the methods in Interface for the depot array.
     private Product[] product = new Product[5];
