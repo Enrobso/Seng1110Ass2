@@ -4,14 +4,12 @@ import java.io.*;
 Title: Interface
 Authors: Ephream Osborne, Ethan Sarginson 
 Student number: C3279393, C3329758
-Last update: 8/5/2019
+Last update: 27/5/2019
 This class contains all the details of the interface.
 */
 public class Interface
 {
     //The private variables for this class.
-    //These variables will probably become redundant. Since these values will be stored in the Depot class.
-    private Depot depot1, depot2, depot3, depot4;
     private String UserInput = "";
     private double price = 0.0, weight = 0.0;
     private int quantity = 0;
@@ -430,9 +428,8 @@ public class Interface
             if (exist == 0){
                 System.out.println("Sorry, this product does not exist.");
             }
-            
-            returnToMenu();
         }
+        returnToMenu();
     }
     /**
      * Input is 8, the user can check for the cumulative cost of all the products in the depot.
