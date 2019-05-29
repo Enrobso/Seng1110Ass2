@@ -14,17 +14,30 @@ public class Depot
     private int counterDepot = 0;
     private String name;
     //The following methods will be for the new program.
+    /**
+     * This is the default constructor. When a depot is initialised it is set to a default name.
+     * This name is "Empty" and is displayed when querying for depots.
+     */
     public Depot(){
         name = "Empty";
     }
+    
+    /**
+     * Products are all initialised at the beginning of the programs execution.
+     */
     public static void initiateSameNameArray(){
         for (int i = 0; i < productSameName.length; i++){
             productSameName[i] = new Product();
         }
     }
+    
+    /**
+     * Return's the counter of the specified depot.
+     */
     public int getCounter(){
         return counterDepot;
     }
+    
     /**
      * Checks if the products are all null. Returns true if so.
      */
@@ -34,6 +47,7 @@ public class Depot
         else
         return false;
     }
+    
     /**
      * Initiates the products in the depots at the beginning of the program.
      */
@@ -42,18 +56,21 @@ public class Depot
             product[i] = new Product();
         }
     }
+    
     /**
      * Sets the depot's name.
      */
     public void setName(String newName){
         name = newName;
     }
+    
     /**
      * Returns the specified depot's name.
      */
     public String getName(){
         return name;
     }
+    
     /**
      * Returns the quantity of a specified product within a depot.
      * Returns -1 if the product was not found. 
@@ -67,6 +84,7 @@ public class Depot
         }
         return qty;
     }
+    
     /**
      * Precondition: a string inputted by the user. This is a name of a product.
      * Postcondition: returns an array that matches the array of an equal named product.
@@ -83,6 +101,7 @@ public class Depot
         }
         return productSameName;
     }
+    
     /**
      * Notifies the program if there is a product within the array that has the same name as the user's input.
      */
@@ -95,6 +114,7 @@ public class Depot
         }
         return returnValue;
     }
+    
     /**
      * Sets the specified product to the values of the product with the same name.
      * The quantity is chosen by the user.
@@ -108,6 +128,7 @@ public class Depot
         productArraySort();
         emptyProductSort();
     }
+    
     /**
      * Preposition: name, price, weight and quantity of product.
      * Postcondition: New product added to specified depot if depot is not full.
@@ -123,6 +144,7 @@ public class Depot
             productArraySort();
             emptyProductSort();
     }
+    
     /**
      * If the user attempts to add a product with the same name as an already existing product,
      * the user will be notified. This method takes the new quantity from the user 
@@ -149,6 +171,7 @@ public class Depot
             }
         }
     }
+    
     /**
      * This sorts the array so that all empty elements are put to the end of the array.
      * The first empty place is the same as counter.
@@ -164,6 +187,7 @@ public class Depot
             }
         }
     }
+    
     /**
      * Returns a one line message "No products" if all the products are null.
      * If not all products are empty, the values of the existing depots is returned.
@@ -174,6 +198,7 @@ public class Depot
         else
         getProductIndividual();
     }
+    
     /**
      * Returns products' values for getProduct.
      */
@@ -185,6 +210,7 @@ public class Depot
             System.out.println(product[i].getName());
         }
     }
+    
     /**
      * This is for exporting the depot and product information to a txt file.
      */
@@ -192,12 +218,13 @@ public class Depot
         String outputFile = "";
         for (int i = 0; i < counterDepot; i++){
             if ((counterDepot > 1) && ((i < (counterDepot-1))))
-                outputFile += (name+ " "+product[i].getName()+" "+product[i].getPrice()+" "+product[i].getWeight()+" "+product[i].getQuantity()+",");
+                outputFile += (name+"-depot"+ " "+product[i].getName()+" "+product[i].getPrice()+" "+product[i].getWeight()+" "+product[i].getQuantity()+",");
             else
-                outputFile += (name+ " "+product[i].getName()+" "+product[i].getPrice()+" "+product[i].getWeight()+" "+product[i].getQuantity());
+                outputFile += (name+"-depot"+" "+product[i].getName()+" "+product[i].getPrice()+" "+product[i].getWeight()+" "+product[i].getQuantity());
         }
         return outputFile;
     }
+    
     /**
      * Precondition: the product's name and the quantity.
      * Postcondition: the product is found and the specified quantity is removed from the product.
@@ -226,6 +253,9 @@ public class Depot
         }
         return returnNum;
     }
+    /**
+     * Returns the total cumulative value of a depot.
+     */
     public double getProductPrice(){
         double sum = 0;
         for (int i = 0; i < product.length; i++){
