@@ -116,6 +116,7 @@ public class Interface
             }
         }
     }
+    
     /**
      * Rather than the main being the interface, a method is invoked so as to eliminate the need for static.
      */
@@ -124,10 +125,6 @@ public class Interface
         intFace.run();
     }
     
-    //Finish off this equals method. It might be useful.
-    /*public boolean equals(int depotPos){
-        return depot[depotPos].getDepot();
-    }*/
     /**
      * Sets all the depots to a default value at the beginning of the program.
      */
@@ -159,10 +156,6 @@ public class Interface
     public void printDepots(){
         System.out.println("Sorry, you do not have any depots.");
         }
-    //This could be a method implemented to reduce copy-paste.
-    /*public void checkDepotMatch(){
-        
-    }*/
     
     /**
      * Input is 1, the method to add a depot is invoked. It checks the counter. If the counter is at 4, the depots are full. 
@@ -173,6 +166,7 @@ public class Interface
             System.out.println("Enter the name of the new depot:");
             UserInput = keyboard.nextLine();
             UserInput = UserInput.toLowerCase();
+            UserInput = UserInput.replaceAll(" ","");
             
             for (int i = 0; i < depot.length; i++){
                     while (depot[i].getName().equals(UserInput)){
@@ -192,6 +186,7 @@ public class Interface
             returnToMenu();
         }
     }
+    
     /**
      * Input is 2, the method to delete a depot is invoked. 
      * It will check if the user input is the same as a registered depot.
@@ -226,6 +221,7 @@ public class Interface
         }
         returnToMenu();
     }
+    
     /**
      * Input is 3, the user can add a new product to a depot they specify.
      * They will be requested to input name, quantity, weight and cost. Not necessarily in that order.
@@ -257,6 +253,7 @@ public class Interface
                 System.out.println("Now enter the name of the product: ");
                 UserInput = keyboard.nextLine();
                 UserInput = UserInput.toLowerCase();
+                UserInput = UserInput.replaceAll(" ","");
                 //Enter depot and product array check in here. If there is a product with the same name, it indicates this.
                 int ifNewProduct = 0;
                 if (depot[indexDepot].checkProductArray(UserInput) == 1){
@@ -381,6 +378,7 @@ public class Interface
         }
         returnToMenu();
     }
+    
     /**
      * Input is 6, the user can choose a depot to query for products. 
      * All the products are listed with their cost, weight, quantities.
@@ -406,6 +404,7 @@ public class Interface
         }
         returnToMenu();
     }
+    
     /**
      * Input is 7, the user can search for a product.
      * The depot/s the product is in with its quantity is printed. The product may be in both depots.
@@ -431,6 +430,7 @@ public class Interface
         }
         returnToMenu();
     }
+    
     /**
      * Input is 8, the user can check for the cumulative cost of all the products in the depot.
      */
@@ -455,6 +455,7 @@ public class Interface
         }
         returnToMenu();
     }
+    
     /**
      * Input is 9, user specifies the name of the file.
      * Depot and product information is exported to a text file.
@@ -478,7 +479,7 @@ public class Interface
         String[] outputLine = new String[5];
         for (int i = 0; i < counter; i++){
             if (depot[i].getCounter() == 0){
-                outputStream.println(depot[i].getName());
+                outputStream.println(depot[i].getName()+"-depot");
             }
             else{
                 line = depot[i].exportProducts();
@@ -499,6 +500,7 @@ public class Interface
         System.out.println("The lines were written to the text file "+fileName);
         returnToMenu();
     }
+    
     /**
      * Input is 10, user specifies the file to import.
      * The file is imported into depot and product information.
@@ -532,22 +534,31 @@ public class Interface
                 //A line with no spaces is a depot only.
                 int i = -1;
                 UserInput = UserInput.toLowerCase();
-                for (int j = 0; j < depot.length; j++){
-                    if(depot[j].getName().equals(UserInput)){
-                        i = j;
+                boolean containsDepotName = UserInput.contains("-depot");
+                if(containsDepotName){
+                    int indexOfDepot = UserInput.indexOf("-");
+                    UserInput = UserInput.substring(0,indexOfDepot);
+                    for (int j = 0; j < depot.length; j++){
+                        if(depot[j].getName().equals(UserInput)){
+                            i = j;
+                        }
+                    }
+                    if (i != -1){
+                        System.out.println("The depot "+UserInput+" already exists.");
+                        System.out.println("That depot will be used.");
+                    }
+                    else{
+                        depot[counter].setName(UserInput);
+                        counter++;
+                        depotArraySort();
+                        arraySortEmpty();
+                        System.out.println("The depot "+UserInput+" was successfully added.");
                     }
                 }
-                if (i != -1){
-                    System.out.println("The depot "+UserInput+" already exists.");
-                    System.out.println("That depot will be used.");
-                }
                 else{
-                    depot[counter].setName(UserInput);
-                    counter++;
-                    depotArraySort();
-                    arraySortEmpty();
-                    System.out.println("The depot "+UserInput+" was successfully added.");
+                    System.out.println("The depot name must have -depot written exactly after it with no spaces.");
                 }
+                System.out.println();
             }
             else{
                 //Add a depot that may or may not be new, with the new product.
@@ -557,7 +568,9 @@ public class Interface
                 try{
                     importArray = UserInput.split(" ");
                     importArray[0] = importArray[0].toLowerCase();
+                    
                     importArray[1] = importArray[1].toLowerCase();
+                    
                     price = Double.parseDouble(importArray[2]);
                     weight = Double.parseDouble(importArray[3]);
                     quantity = Integer.parseInt(importArray[4]);
@@ -569,6 +582,15 @@ public class Interface
                 boolean posPrice = price > 0;
                 boolean posWeight = weight > 0;
                 boolean posQuantity = quantity > 0;
+                boolean containsDepot = importArray[0].contains("-depot");
+                if(!containsDepot){
+                    System.out.println("The depot name must have -depot written exactly after it with no spaces.");
+                    checkForException = 1;
+                }
+                else{
+                    int indexOfDash = importArray[0].indexOf("-");
+                    importArray[0] = importArray[0].substring(0,indexOfDash);
+                }
                 if (!posPrice){
                     System.out.println("The price is negative on this line. This line will be skipped.");
                     checkForException = 1;
@@ -649,16 +671,14 @@ public class Interface
                         System.out.println("Sorry, that depot is full.");
                     }
                 }
-                else if ((checkForException == 1) && posPrice && posWeight && posQuantity){
+                else if ((checkForException == 1) && posPrice && posWeight && posQuantity && containsDepot){
                     System.out.println("There was an error in the formatting of the line.");
                     checkForException = 0;
                 }
                 else{
                     checkForException = 0;
                 }
-        
             }
-        
         }
         inputStream.close();
         returnToMenu();
@@ -671,6 +691,7 @@ public class Interface
         System.out.println("Thankyou for using Alcolworths Supermarkets.");
         UserInput = "9";
     }
+    
     /** 
      * Prompts user to enter an input to continue to the menu. Gives them time to read the queries. 
      */
@@ -678,6 +699,7 @@ public class Interface
         System.out.println("Enter any character to return to menu:");
         UserInput = keyboard.nextLine();
     }
+    
     /**
      * Sorts the arrays into alphabetical order, with empty depots at the end.
      */
@@ -692,6 +714,7 @@ public class Interface
             }
         }
     }
+    
     /**
      * This sorts the array so that all empty elements are put to the end of the array.
      * The first empty place is the same as counter.
