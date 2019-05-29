@@ -11,7 +11,9 @@ public class Product
     private double price;
     private double weight;
     private int quantity;
-    
+    /**
+     * This is the constructor. When the products are initialised they are set to a default value.
+     */
     public Product(){
         name = "Empty";
         price = 0;
@@ -19,8 +21,6 @@ public class Product
         quantity = 0;
     }
     
-
-
     /**
      * Get the product's name.
      */
@@ -29,6 +29,7 @@ public class Product
         return name;        
 
     }
+    
     /**
      * The user needs to be able to search/add a product name. This sets the product name for that.
      */
@@ -36,7 +37,6 @@ public class Product
     {
         name = newName;
     }
-
     /**
      * Returns the product price.
      */
@@ -45,6 +45,7 @@ public class Product
         return price;       
 
     }
+    
     /**
      * The user also needs to search/add the product's price, weight and quantity. 
      * This method sets the price.
@@ -53,8 +54,7 @@ public class Product
     {
         price = newPrice;
     }
-
-
+    
     /**
      * Returns the product's weight.
      */
